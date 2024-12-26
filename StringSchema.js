@@ -1,24 +1,26 @@
-class StringSchema {
+class StringValidator {
     constructor() {
-        this.containsNumberFlag = false;
+        this.checks = [];
     }
 
-    // Метод для добавления проверки на наличие числа в строке
-    containsNumber() {
-        this.containsNumberFlag = true;
-        return this;
-    }
-
-    // Метод для проверки валидности данных
     isValid(value) {
-        if (typeof value !== 'string') return false;
+        if (typeof value !== 'string') {
+            return false;
+        }
 
-        if (this.containsNumberFlag) {
-            return /\d/.test(value);
+        for (const check of this.checks) {
+            if (!check(value)) {
+                return false;
+            }
         }
 
         return true;
     }
+
+    containsNumber() {
+        this.checks.push((value) => /\d/.test(value));
+        return this;
+    }
 }
 
-export default StringSchema;
+export default StringValidator;
